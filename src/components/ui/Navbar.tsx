@@ -1,10 +1,9 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 const links = [
-  { id: "services", key: "services" },
-  { id: "showroom", key: "showroom" },
+  { id: "examples", key: "examples" },
   { id: "process", key: "process" },
   { id: "packages", key: "packages" },
   { id: "faq", key: "faq" },
@@ -29,7 +28,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-700 ${
         scrolled ? "glass-strong py-3" : "bg-transparent py-5"
       }`}
     >
@@ -40,12 +39,12 @@ export function Navbar() {
             e.preventDefault();
             scrollTo("hero");
           }}
-          className="font-display text-xl font-bold tracking-tight text-white"
+          className="font-display text-lg font-medium tracking-[0.14em] text-white"
         >
-          Nova<span className="text-gradient">Studio</span>
+          NOVA<span className="text-gold">·</span>STUDIO
         </a>
 
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden items-center gap-8 lg:flex">
           {links.map((l) => (
             <a
               key={l.id}
@@ -54,7 +53,7 @@ export function Navbar() {
                 e.preventDefault();
                 scrollTo(l.id);
               }}
-              className="text-sm text-gray-300 transition-colors hover:text-white"
+              className="text-sm text-stone-300 transition-colors hover:text-white"
             >
               {t.nav[l.key]}
             </a>
@@ -66,14 +65,14 @@ export function Navbar() {
             <button
               onClick={() => setLang("tr")}
               aria-pressed={lang === "tr"}
-              className={`px-3 py-1.5 transition-colors ${lang === "tr" ? "bg-indigo-400/20 text-indigo-300" : "text-gray-400 hover:text-white"}`}
+              className={`px-3 py-1.5 transition-colors ${lang === "tr" ? "bg-gold/20 text-gold-soft" : "text-stone-400 hover:text-white"}`}
             >
               TR
             </button>
             <button
               onClick={() => setLang("en")}
               aria-pressed={lang === "en"}
-              className={`px-3 py-1.5 transition-colors ${lang === "en" ? "bg-indigo-400/20 text-indigo-300" : "text-gray-400 hover:text-white"}`}
+              className={`px-3 py-1.5 transition-colors ${lang === "en" ? "bg-gold/20 text-gold-soft" : "text-stone-400 hover:text-white"}`}
             >
               EN
             </button>
@@ -81,7 +80,7 @@ export function Navbar() {
 
           <button
             onClick={() => scrollTo("contact")}
-            className="hidden rounded-full bg-indigo-500 hover:bg-indigo-400 px-5 py-2 text-sm font-semibold text-white transition-colors md:block"
+            className="hidden rounded-full bg-cream px-5 py-2 text-sm font-semibold text-ink transition-colors duration-500 hover:bg-white md:block"
           >
             {t.nav.cta}
           </button>
@@ -116,7 +115,7 @@ export function Navbar() {
                     e.preventDefault();
                     scrollTo(l.id);
                   }}
-                  className="rounded-lg px-3 py-2.5 text-sm text-gray-200 hover:bg-white/5"
+                  className="rounded-lg px-3 py-2.5 text-sm text-stone-200 hover:bg-white/5"
                 >
                   {t.nav[l.key]}
                 </a>
@@ -128,4 +127,3 @@ export function Navbar() {
     </header>
   );
 }
-

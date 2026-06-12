@@ -1,12 +1,8 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion } from "./useMediaQuery";
 
-gsap.registerPlugin(ScrollTrigger);
-
-/** Lenis smooth scroll'u GSAP ScrollTrigger ile senkronize kurar. */
+/** Yumuşak, yavaş ve premium hissettiren smooth scroll. */
 export function useLenis() {
   const reducedMotion = useReducedMotion();
 
@@ -14,20 +10,19 @@ export function useLenis() {
     if (reducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
-    lenis.on("scroll", ScrollTrigger.update);
-
+    let rafId: number;
     const raf = (time: number) => {
-      lenis.raf(time * 1000);
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
     };
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
-      gsap.ticker.remove(raf);
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, [reducedMotion]);

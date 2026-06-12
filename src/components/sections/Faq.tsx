@@ -29,10 +29,10 @@ export function Faq() {
                 aria-expanded={isOpen}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="font-display text-sm font-semibold text-white md:text-base">{item.q[lang]}</span>
+                <span className="text-sm font-semibold text-white md:text-base">{item.q[lang]}</span>
                 <span
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-indigo-300 transition-transform duration-300 ${
-                    isOpen ? "rotate-45 bg-indigo-400/20" : "bg-white/5"
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-gold transition-transform duration-300 ${
+                    isOpen ? "rotate-45 bg-gold/15" : "bg-white/5"
                   }`}
                   aria-hidden
                 >
@@ -47,7 +47,7 @@ export function Faq() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.35, ease: "easeInOut" }}
                   >
-                    <p className="px-6 pb-5 text-sm leading-relaxed text-gray-400">{item.a[lang]}</p>
+                    <p className="px-6 pb-5 text-sm leading-relaxed text-stone-400">{item.a[lang]}</p>
                   </motion.div>
                 )}
               </AnimatePresence>

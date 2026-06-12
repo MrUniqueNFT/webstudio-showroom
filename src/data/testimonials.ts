@@ -7,26 +7,26 @@ export interface Testimonial {
 export const testimonials: Testimonial[] = [
   {
     quote: {
-      tr: "Sitemiz sadece yenilenmedi, markamızın algısı değişti. Müşterilerimiz artık bizi çok daha kurumsal görüyor.",
-      en: "Our website wasn't just redesigned — our brand perception changed. Clients now see us as far more professional.",
+      tr: "Yeni sitemizden sonra müşterilerimiz bizi çok daha profesyonel algılamaya başladı.",
+      en: "After our new website, customers started seeing us as far more professional.",
     },
     name: "Elif K.",
-    role: { tr: "Pazarlama Direktörü, Mimarlık Ofisi", en: "Marketing Director, Architecture Firm" },
+    role: { tr: "Güzellik Merkezi Sahibi", en: "Beauty Studio Owner" },
   },
   {
     quote: {
-      tr: "Animasyonlu landing page sayesinde reklam dönüşümlerimiz arttı. Yatırımın karşılığını ilk ayda aldık.",
-      en: "Thanks to the animated landing page, our ad conversions increased. The investment paid off in the first month.",
+      tr: "Sade, şık ve hızlı bir siteye ihtiyacımız vardı. Beklediğimizden daha iyi oldu.",
+      en: "We needed a simple, elegant and fast website. It turned out better than we expected.",
     },
     name: "Mert A.",
-    role: { tr: "Kurucu, E-Ticaret Markası", en: "Founder, E-Commerce Brand" },
+    role: { tr: "Restoran İşletmecisi", en: "Restaurant Owner" },
   },
   {
     quote: {
-      tr: "Kısa sürede premium bir dijital vitrine sahip olduk. 3D showroom deneyimi müşterilerimizi gerçekten etkiliyor.",
-      en: "We got a premium digital storefront in no time. The 3D showroom experience truly impresses our clients.",
+      tr: "İlk defa web sitemiz markamızı gerçekten temsil ediyor.",
+      en: "For the first time, our website truly represents our brand.",
     },
     name: "Zeynep T.",
-    role: { tr: "Genel Müdür, Mobilya Markası", en: "General Manager, Furniture Brand" },
+    role: { tr: "Danışmanlık Firması Kurucusu", en: "Consulting Firm Founder" },
   },
 ];

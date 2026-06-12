@@ -1,61 +1,73 @@
-import { lazy, Suspense } from "react";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { MagneticButton } from "../ui/MagneticButton";
-import { HeroMockup } from "../ui/HeroMockup";
-
-const HeroScene = lazy(() =>
-  import("../three/HeroScene").then((m) => ({ default: m.HeroScene }))
-);
+import { useReducedMotion } from "../../hooks/useMediaQuery";
+import heroImage from "../../assets/hero.jpg";
 
 export function Hero() {
   const { t } = useLanguage();
+  const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  // Parallax: scroll ilerledikçe görsel yavaşça yukarı kayar ve kararır
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0, 0.55]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section id="hero" className="relative flex min-h-screen items-center overflow-hidden">
-      {/* 3D sahne — arka plan */}
-      <Suspense
-        fallback={
-          <div className="absolute inset-0 flex items-center justify-center" aria-label="Yükleniyor">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
-          </div>
-        }
+    <section id="hero" ref={sectionRef} className="relative flex min-h-screen items-end overflow-hidden">
+      {/* Sinematik arka plan görseli — yavaş zoom + parallax */}
+      <motion.div className="absolute inset-0" style={reducedMotion ? undefined : { y: imageY }}>
+        <img
+          src={heroImage}
+          alt=""
+          aria-hidden
+          className={`h-[120%] w-full object-cover ${reducedMotion ? "" : "hero-zoom"}`}
+          fetchPriority="high"
+        />
+      </motion.div>
+
+      {/* Karartma katmanları — okunabilirlik + sinematik his */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/35" />
+      <div className="absolute inset-0 bg-gradient-to-r from-ink/65 via-transparent to-ink/30" />
+      <motion.div className="absolute inset-0 bg-ink" style={reducedMotion ? undefined : { opacity: overlayOpacity }} />
+
+      <motion.div
+        className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-28 pt-40 md:px-8 md:pb-36"
+        style={reducedMotion ? undefined : { y: textY, opacity: textOpacity }}
       >
-        <HeroScene />
-      </Suspense>
-
-      {/* Kenar karartmaları — metin okunabilirliği */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-night to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-night to-transparent" />
-
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-16 px-5 pt-28 pb-20 md:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pt-24">
-        <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:text-left">
+        <div className="max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="eyebrow"
           >
             {t.hero.badge}
           </motion.p>
 
           <motion.h1
-            initial={{ opacity: 0, y: 28 }}
+            initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.35 }}
-            className="font-display mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white md:text-6xl xl:text-7xl"
+            transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+            className="font-display mt-6 text-4xl font-medium leading-[1.12] tracking-tight text-white md:text-6xl xl:text-[4.4rem]"
           >
-            {t.hero.title.split(",")[0]},{" "}
-            <span className="text-gradient">{t.hero.title.split(",").slice(1).join(",")}</span>
+            {t.hero.title}
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.55 }}
-            className="mt-7 max-w-xl text-base leading-relaxed text-zinc-400 md:text-lg lg:pr-8"
+            transition={{ duration: 1.1, delay: 0.8, ease: "easeOut" }}
+            className="mt-7 max-w-xl text-base leading-relaxed text-stone-300 md:text-lg"
           >
             {t.hero.subtitle}
           </motion.p>
@@ -63,40 +75,34 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.75 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+            transition={{ duration: 1.1, delay: 1.05, ease: "easeOut" }}
+            className="mt-10 flex flex-wrap items-center gap-4"
           >
             <MagneticButton onClick={() => scrollTo("contact")}>
               {t.hero.ctaPrimary}
               <span aria-hidden>→</span>
             </MagneticButton>
-            <MagneticButton variant="ghost" onClick={() => scrollTo("showroom")}>
+            <MagneticButton variant="ghost" onClick={() => scrollTo("examples")}>
               {t.hero.ctaSecondary}
             </MagneticButton>
           </motion.div>
         </div>
-
-        {/* Premium mockup kompozisyonu — sadece lg+ */}
-        <div className="hidden lg:block lg:pl-6">
-          <HeroMockup />
-        </div>
-      </div>
+      </motion.div>
 
       {/* Scroll göstergesi */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 1 }}
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
+        transition={{ delay: 2, duration: 1.2 }}
+        className="absolute bottom-8 right-8 z-10 hidden items-center gap-3 md:flex"
         aria-hidden
       >
-        <div className="h-9 w-5 rounded-full border border-zinc-700 p-1">
-          <motion.div
-            animate={{ y: [0, 14, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="mx-auto h-2 w-1 rounded-full bg-indigo-400"
-          />
-        </div>
+        <span className="text-[11px] uppercase tracking-[0.2em] text-stone-400">{t.hero.scroll}</span>
+        <motion.span
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          className="block h-8 w-px bg-gradient-to-b from-stone-400 to-transparent"
+        />
       </motion.div>
     </section>
   );

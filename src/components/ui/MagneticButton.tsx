@@ -25,12 +25,12 @@ export function MagneticButton({ children, variant = "primary", className = "", 
   };
 
   const base =
-    "relative inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold transition-all duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400";
+    "relative inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold transition-all duration-500 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold";
   const variants = {
     primary:
-      "bg-indigo-500 text-white shadow-[0_8px_30px_-8px_rgba(99,102,241,0.6)] hover:bg-indigo-400 hover:shadow-[0_12px_40px_-8px_rgba(99,102,241,0.7)]",
+      "bg-cream text-ink shadow-[0_12px_36px_-12px_rgba(0,0,0,0.6)] hover:bg-white",
     ghost:
-      "glass text-white hover:bg-white/[0.07] hover:border-white/20",
+      "border border-white/25 text-white backdrop-blur-sm hover:border-white/50 hover:bg-white/[0.06]",
   };
 
   return (
