@@ -1,14 +1,19 @@
-import { useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { MagneticButton } from "../ui/MagneticButton";
 import { useReducedMotion } from "../../hooks/useMediaQuery";
+import { useWebGLSupport } from "../../hooks/useWebGLSupport";
 import heroImage from "../../assets/hero.jpg";
+
+// Derinlik sahnesi ayrı chunk olarak sadece destekleyen cihazlarda yüklenir
+const HeroDepthScene = lazy(() => import("../three/HeroDepthScene"));
 
 export function Hero() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
+  const depthEnabled = useWebGLSupport();
 
   // Parallax: scroll ilerledikçe görsel yavaşça yukarı kayar ve kararır
   const { scrollYProgress } = useScroll({
@@ -33,6 +38,11 @@ export function Hero() {
           className={`h-[120%] w-full object-cover ${reducedMotion ? "" : "hero-zoom"}`}
           fetchPriority="high"
         />
+        {depthEnabled && (
+          <Suspense fallback={null}>
+            <HeroDepthScene />
+          </Suspense>
+        )}
       </motion.div>
 
       {/* Karartma katmanları — okunabilirlik + sinematik his */}
